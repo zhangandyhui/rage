@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE generatorConfiguration    
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"    
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- 数据库访问的驱动包 -->
+	<classPathEntry
+		location="D:\work\elongResources\MavenProp\repository\mysql\mysql-connector-java\5.1.34\mysql-connector-java-5.1.34.jar" />
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 这个最好设置成false 否则容易出现重复代码 -->
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://192.168.14.58:6016/WeiXinPacket" userId="root"
+			password="123456">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- javabeen生成的地方 -->
+		<javaModelGenerator targetPackage="com.elong.titan.promotionplatform.agent.entity"
+			targetProject="elong.titan.promotionplatform.agent.entity">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+			<property name="useActualColumnNames" value="true" />
+		</javaModelGenerator>
+		<!-- mapper生成的地方 -->
+		<sqlMapGenerator targetPackage="com.elong.titan.promotionplatform.agent.entity"
+			targetProject="elong.titan.promotionplatform.agent.entity">
+			<property name="enableSubPackages" value="false" />
+			<property name="useActualColumnNames" value="true" />
+		</sqlMapGenerator>
+		<!-- mapper.xml生成的地方 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.elong.titan.promotionplatform.agent.entity" targetProject="elong.titan.promotionplatform.agent.entity">
+			<property name="enableSubPackages" value="true" />
+			<property name="useActualColumnNames" value="true" />
+		</javaClientGenerator>
+		<!-- 表名和生成的实体名 -->
+		<table tableName="PromotionPlatform_Activity" domainObjectName="ActivityEntity" enableSelectByExample="false" enableCountByExample="false" enableDeleteByExample="false"  enableUpdateByExample="false" />
+<!-- 		<table tableName="PromotionPlatform_Configure" domainObjectName="ConfigureEntity" /> -->
+<!-- 		<table tableName="PromotionPlatform_OperationRecord" domainObjectName="OperationRecordEntity" /> -->
+<!-- 		<table tableName="PromotionPlatform_Page" domainObjectName="PageEntity" /> -->
+<!-- 		<table tableName="PromotionPlatform_RechargeRecord"	domainObjectName="RechargeRecordEntity" /> -->
+	</context>
+
+</generatorConfiguration>

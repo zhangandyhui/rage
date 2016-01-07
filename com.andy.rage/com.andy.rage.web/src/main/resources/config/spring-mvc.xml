@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="com.andy.*" />
+	<mvc:annotation-driven
+		content-negotiation-manager="contentNegotiationManager">
+	</mvc:annotation-driven>
+
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="true" />
+		<property name="favorParameter" value="true" />
+		<property name="mediaTypes">
+			<value>
+				json=application/json
+				xml=application/xml
+			</value>
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="viewResolvers">
+			<list>
+				<ref bean="freeMarkerViewResolver" />
+				<ref bean="jspViewResolver" />
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+			</list>
+		</property>
+	</bean>
+	<!-- 注意：FreeMarker与SpringMVC集成时，其配置一定要放在SpringMVC的配置之前 -->
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<!-- 指定FreeMarker模板文件目录 -->
+		<property name="templateLoaderPath" value="/WEB-INF/views/" />
+		<!-- 编码设置 -->
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="template_update_delay">999999999</prop>
+				<!-- <prop key="locale">en_US</prop> -->
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="number_format">#.##</prop>
+				<prop key="auto_import">/ftlshared/spring.ftl as spring</prop>
+			</props>
+		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="xml_escape" value-ref="fmXmlEscape" />
+				<!--下面四个是在下面定义的 -->
+				<entry key="extends" value-ref="extendsDirective" />
+				<entry key="override" value-ref="overrideDirective" />
+				<entry key="block" value-ref="blockDirective" />
+				<entry key="super" value-ref="superDirective" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="freeMarkerViewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="suffix" value=".ftl" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+	</bean>
+
+	<!-- 定义视图解析器 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+<!-- 	<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+
+	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="port" value="6381" />
+		<property name="hostName" value="192.168.14.52" />
+	</bean> -->
+</beans>     
